@@ -4,9 +4,10 @@ const App = () => {
 
   const [ bill, setBill ] = useState(0);
   const [ percentage, setPercentage ] = useState(0);
+  const [ selectedPercentage, setSelectedPercentage ] = useState(null);
   const [ people, setPeople ] = useState(0);
-  const [ total, setTotal ] = useState('0.00');
-  const [ tip, setTip ] = useState('0.00');
+  const [ total, setTotal ] = useState(0.00);
+  const [ tip, setTip ] = useState(0.00);
 
   const handleBill = (e) => {
     setBill(e.target.value);
@@ -14,6 +15,12 @@ const App = () => {
 
   const handleCustomTip = (e) => {
     setPercentage(e.target.value);
+    setSelectedPercentage(null);
+  }
+
+  const handlePercentageClick = (value) => {
+    setPercentage(value);
+    setSelectedPercentage(value);
   }
 
   const handlePeople = (e) => {
@@ -21,8 +28,10 @@ const App = () => {
   }
 
   const reset = () => {
-    setTip(((+(percentage) / 100) * +(bill)) / +(people));
-    setTotal(+(bill) / +(people));
+    const newTip = ((+(percentage) / 100) * +(bill)) / +(people);
+    const newTotal = +(bill) / +(people) + newTip;
+    setTip(newTip.toFixed(2));
+    setTotal(newTotal.toFixed(2));
   } 
 
   return (
@@ -37,11 +46,11 @@ const App = () => {
           <div className="tips">
           <label>Select Tip %</label>
           <div className="tips-buttons">
-            <button onClick={() => setPercentage(5)}>5%</button>
-            <button onClick={() => setPercentage(10)}>10%</button>
-            <button onClick={() => setPercentage(15)}>15%</button>
-            <button onClick={() => setPercentage(25)}>25%</button>
-            <button onClick={() => setPercentage(50)}>50%</button>
+            <button className={selectedPercentage === 5 ? 'selected' : ''} onClick={() => handlePercentageClick(5)}>5%</button>
+            <button className={selectedPercentage === 10 ? 'selected' : ''} onClick={() => handlePercentageClick(10)}>10%</button>
+            <button className={selectedPercentage === 15 ? 'selected' : ''} onClick={() => handlePercentageClick(15)}>15%</button>
+            <button className={selectedPercentage === 25 ? 'selected' : ''} onClick={() => handlePercentageClick(25)}>25%</button>
+            <button className={selectedPercentage === 50 ? 'selected' : ''} onClick={() => handlePercentageClick(50)}>50%</button>
             <input onChange={handleCustomTip} className="custom-input" placeholder="Custom"></input>
           </div>
           </div>
